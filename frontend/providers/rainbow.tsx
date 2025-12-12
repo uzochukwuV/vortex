@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Define Tenderly Fork chain
 const tenderlyFork = {
-  id: 23772913,
+  id: 8,
   name: 'QIE Testnet (Tenderly Fork)',
   nativeCurrency: {
     name: 'Ethereum',

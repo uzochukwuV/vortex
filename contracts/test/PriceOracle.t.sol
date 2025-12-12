@@ -11,11 +11,11 @@ contract MockV3AggregatorStale is IAggregatorV3 {
     uint8 public override decimals;
     string public override description = "Stale Mock";
     uint256 public override version = 1;
-    int256 private _answer;
-    
-    constructor(uint8 _decimals, int256 _answer) {
+    int256 private storedAnswer;
+
+    constructor(uint8 _decimals, int256 _initialAnswer) {
         decimals = _decimals;
-        _answer = _answer > 0 ? _answer : 50000 * 10**8; // Ensure positive
+        storedAnswer = _initialAnswer > 0 ? _initialAnswer : int256(50000 * 10**8); // Ensure positive
     }
     
     function latestRoundData() external view override returns (
@@ -25,9 +25,9 @@ contract MockV3AggregatorStale is IAggregatorV3 {
         uint256 updatedAt,
         uint80 answeredInRound
     ) {
-        return (10, _answer, block.timestamp, block.timestamp, 5); // answeredInRound < roundId
+        return (10, storedAnswer, block.timestamp, block.timestamp, 5); // answeredInRound < roundId
     }
-    
+
     function getRoundData(uint80) external view override returns (
         uint80 roundId,
         int256 answer,
@@ -35,7 +35,7 @@ contract MockV3AggregatorStale is IAggregatorV3 {
         uint256 updatedAt,
         uint80 answeredInRound
     ) {
-        return (10, _answer, block.timestamp, block.timestamp, 5);
+        return (10, storedAnswer, block.timestamp, block.timestamp, 5);
     }
 }
 

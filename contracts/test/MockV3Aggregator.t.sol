@@ -13,7 +13,7 @@ contract MockV3AggregatorTest is Test {
     int256 constant INITIAL_PRICE = 50_000 * 10**8; // $50k
     
     function setUp() public {
-        aggregator = new MockV3Aggregator(DECIMALS, INITIAL_PRICE);
+         aggregator = new MockV3Aggregator(DECIMALS, INITIAL_PRICE);
         oracle = new PriceOracle(1991); // QIE testnet
     }
 
