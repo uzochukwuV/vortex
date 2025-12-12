@@ -1,0 +1,17 @@
+.env
+node_modules
+dist
+build
+.DS_Store
+src.zip
+.env.example
+.vscode
+npm-debug.log*
+yarn-error.log*
+.idea
+
+# Logs
+logs
+*.log   
+
+.next/

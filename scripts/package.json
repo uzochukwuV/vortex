@@ -1,0 +1,13 @@
+{
+  "name": "perp-dex-scripts",
+  "version": "1.0.0",
+  "description": "Scripts for GMX-style perpetual DEX",
+  "main": "verifyPriceOracle.js",
+  "scripts": {
+    "verify:oracle": "node verifyPriceOracle.js"
+  },
+  "dependencies": {
+    "ethers": "^6.9.0"
+  },
+  "type": "commonjs"
+}

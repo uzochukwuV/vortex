@@ -1,0 +1,96 @@
+
+// Tenderly Fork Deployment (QIE Testnet)
+// Mock Tokens:
+//     Mock USDT: 0x13a9fBb5E292a67F4533555A049CEecFcfA56e47
+//     Mock BTC: 0xA69b9B831DCf8e5361C2e6D30c07D90f73C08EA9
+//     Mock ETH: 0x629cfCA0e279d895A798262568dBD8DaA7582912
+//     Mock BNB: 0xb2025C81F71dECB695b6B88ebDBf58aFaB13545d
+//     Mock SOL: 0x5D9850310654C617C37b1c71e149B98086Ba670b
+//     Mock QIE: 0x0a5568Dfe392f67900eF3E1c720554019249666C
+
+// Mock Price Feeds:
+//     BTC Feed: 0xD7Fc335A6b6b22dFEb47eBc3eF5801af8be87d69
+//     ETH Feed: 0x75c352dcD4fFd48aA7A35C55d570D3A0a6EdbF63
+//     BNB Feed: 0x70b3cA9e5551e7Ed615F3dc03d190801A1cE8Eb5
+//     SOL Feed: 0x825e3F3D150A323c7004576653CFd2b607875645
+//     QIE Feed: 0xe0591Ef7F28826297BA99Fe5EDFaFcE06e95DA06
+
+// Protocol Contracts:
+//     PlatformToken (PDX): 0xd0cB8Cb9a65c3f7C3940Ab52cf052ce4A438fFDe
+//     PriceOracle: 0x75a7F4Ff7DC7Baf62A5EAEc6f0F17dD796209c1d
+//     PerpetualTrading: 0xC55643aa8FEe3C86ee0f9F939B2f3bACa505cAAD
+//     SpotMarket: 0xA0F5EBdFF15182cEc5Ee35b1697f613D6e072cF9
+//     Staking: 0xca02f116D22734F4f42304668d544ad87Ad74231
+//     Vault: 0x522554c534D77c661A1CbDf0174fd64650679D7a
+//     Governance: 0x95a8e2743A019c40D5979144B821040450dA8f12
+//     LiquidityMining: 0xc289cf5727c6586025C175b9ce245C8C915B247a
+//     RewardDistributor: 0xA685898A43af873FF97D8B8Ab0Cf722d0A0Ea689
+
+// Contract addresses exported for use in the application
+export const CONTRACTS = {
+  // Mock Tokens
+  MOCK_USDT: '0x13a9fBb5E292a67F4533555A049CEecFcfA56e47' as const,
+  MOCK_BTC: '0xA69b9B831DCf8e5361C2e6D30c07D90f73C08EA9' as const,
+  MOCK_ETH: '0x629cfCA0e279d895A798262568dBD8DaA7582912' as const,
+  MOCK_BNB: '0xb2025C81F71dECB695b6B88ebDBf58aFaB13545d' as const,
+  MOCK_SOL: '0x5D9850310654C617C37b1c71e149B98086Ba670b' as const,
+  MOCK_QIE: '0x0a5568Dfe392f67900eF3E1c720554019249666C' as const,
+
+  // Mock Price Feeds
+  BTC_FEED: '0xD7Fc335A6b6b22dFEb47eBc3eF5801af8be87d69' as const,
+  ETH_FEED: '0x75c352dcD4fFd48aA7A35C55d570D3A0a6EdbF63' as const,
+  BNB_FEED: '0x70b3cA9e5551e7Ed615F3dc03d190801A1cE8Eb5' as const,
+  SOL_FEED: '0x825e3F3D150A323c7004576653CFd2b607875645' as const,
+  QIE_FEED: '0xe0591Ef7F28826297BA99Fe5EDFaFcE06e95DA06' as const,
+
+  // Protocol Contracts
+  PLATFORM_TOKEN: '0xd0cB8Cb9a65c3f7C3940Ab52cf052ce4A438fFDe' as const,
+  PRICE_ORACLE: '0x75a7F4Ff7DC7Baf62A5EAEc6f0F17dD796209c1d' as const,
+  PERPETUAL_TRADING: '0xC55643aa8FEe3C86ee0f9F939B2f3bACa505cAAD' as const,
+  SPOT_MARKET: '0xA0F5EBdFF15182cEc5Ee35b1697f613D6e072cF9' as const,
+  STAKING: '0xca02f116D22734F4f42304668d544ad87Ad74231' as const,
+  VAULT: '0x522554c534D77c661A1CbDf0174fd64650679D7a' as const,
+  GOVERNANCE: '0x95a8e2743A019c40D5979144B821040450dA8f12' as const,
+  LIQUIDITY_MINING: '0xc289cf5727c6586025C175b9ce245C8C915B247a' as const,
+  REWARD_DISTRIBUTOR: '0xA685898A43af873FF97D8B8Ab0Cf722d0A0Ea689' as const,
+} as const;
+
+// Network configuration
+export const NETWORK = {
+  CHAIN_ID: 23772913,
+  NAME: 'QIE Testnet (Tenderly Fork)',
+  RPC_URL: 'https://virtual.mainnet.eu.rpc.tenderly.co/82c86106-662e-4d7f-a974-c311987358ff',
+  EXPLORER_URL: 'https://dashboard.tenderly.co',
+} as const;
+
+
+// Legacy exports for backward compatibility
+export const PERPETUAL_TRADING_ADDRESS = CONTRACTS.PERPETUAL_TRADING as `0x${string}`;
+export const PRICE_ORACLE_ADDRESS = CONTRACTS.PRICE_ORACLE as `0x${string}`;
+export const COLLATERAL_TOKEN_ADDRESS = CONTRACTS.MOCK_USDT as `0x${string}`;
+export const PLATFORM_TOKEN_ADDRESS = CONTRACTS.PLATFORM_TOKEN as `0x${string}`;
+export const SPOT_MARKET_ADDRESS = CONTRACTS.SPOT_MARKET as `0x${string}`;
+export const VAULT_ADDRESS = CONTRACTS.VAULT as `0x${string}`;
+export const STAKING_ADDRESS = CONTRACTS.STAKING as `0x${string}`;
+export const GOVERNANCE_ADDRESS = CONTRACTS.GOVERNANCE as `0x${string}`;
+export const LIQUIDITY_MINING_ADDRESS = CONTRACTS.LIQUIDITY_MINING as `0x${string}`;
+export const REWARD_DISTRIBUTOR_ADDRESS = CONTRACTS.REWARD_DISTRIBUTOR as `0x${string}`;
+
+// Mock token addresses
+export const MOCK_USDT_ADDRESS = CONTRACTS.MOCK_USDT as `0x${string}`;
+export const MOCK_BTC_ADDRESS = CONTRACTS.MOCK_BTC as `0x${string}`;
+export const MOCK_ETH_ADDRESS = CONTRACTS.MOCK_ETH as `0x${string}`;
+export const MOCK_BNB_ADDRESS = CONTRACTS.MOCK_BNB as `0x${string}`;
+export const MOCK_SOL_ADDRESS = CONTRACTS.MOCK_SOL as `0x${string}`;
+export const MOCK_QIE_ADDRESS = CONTRACTS.MOCK_QIE as `0x${string}`;
+
+// Price feed addresses
+export const BTC_PRICE_FEED_ADDRESS = CONTRACTS.BTC_FEED as `0x${string}`;
+export const ETH_PRICE_FEED_ADDRESS = CONTRACTS.ETH_FEED as `0x${string}`;
+export const BNB_PRICE_FEED_ADDRESS = CONTRACTS.BNB_FEED as `0x${string}`;
+export const SOL_PRICE_FEED_ADDRESS = CONTRACTS.SOL_FEED as `0x${string}`;
+export const QIE_PRICE_FEED_ADDRESS = CONTRACTS.QIE_FEED as `0x${string}`;
+
+// Supported assets
+export const SUPPORTED_ASSETS = ['BTC', 'ETH', 'BNB', 'SOL', 'QIE'] as const;
+export type SupportedAsset = (typeof SUPPORTED_ASSETS)[number];

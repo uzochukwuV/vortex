@@ -1,0 +1,12 @@
+.env
+src.zip
+.env.example
+.DS_Store
+.vscode
+cache
+npm-debug.log*
+yarn-error.log*
+broadcast/
+out/
+
+# Logs

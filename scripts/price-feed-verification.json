@@ -1,0 +1,72 @@
+[
+  {
+    "success": true,
+    "feedName": "BTC/USD",
+    "address": "0x9E596d809a20A272c788726f592c0d1629755440",
+    "decimals": 8,
+    "price": 90484.15675294,
+    "updatedAt": 1765282743,
+    "age": 3300,
+    "isFresh": true
+  },
+  {
+    "success": true,
+    "feedName": "ETH/USD",
+    "address": "0x4bb7012Fbc79fE4Ae9B664228977b442b385500d",
+    "decimals": 8,
+    "price": 3136.24336309,
+    "updatedAt": 1765283105,
+    "age": 2940,
+    "isFresh": true
+  },
+  {
+    "success": true,
+    "feedName": "XRP/USD",
+    "address": "0x804582B1f8Fea73919e7c737115009f668f97528",
+    "decimals": 8,
+    "price": 2.08286006,
+    "updatedAt": 1765283403,
+    "age": 2643,
+    "isFresh": true
+  },
+  {
+    "success": true,
+    "feedName": "SOL/USD",
+    "address": "0xe86999c8e6C8eeF71bebd35286bCa674E0AD7b21",
+    "decimals": 8,
+    "price": 133.31049582,
+    "updatedAt": 1765283344,
+    "age": 2703,
+    "isFresh": true
+  },
+  {
+    "success": true,
+    "feedName": "QIE/USD",
+    "address": "0x3Bc617cF3A4Bb77003e4c556B87b13D556903D17",
+    "decimals": 8,
+    "price": 0.03942302,
+    "updatedAt": 1765278605,
+    "age": 7444,
+    "isFresh": false
+  },
+  {
+    "success": true,
+    "feedName": "XAUt/USD",
+    "address": "0x9aD0199a67588ee293187d26bA1BE61cb07A214c",
+    "decimals": 8,
+    "price": 4197.9417419,
+    "updatedAt": 1765271464,
+    "age": 14586,
+    "isFresh": false
+  },
+  {
+    "success": true,
+    "feedName": "BNB/USD",
+    "address": "0x775A56117Fdb8b31877E75Ceeb68C96765b031e6",
+    "decimals": 8,
+    "price": 897.27897407,
+    "updatedAt": 1765240564,
+    "age": 45487,
+    "isFresh": false
+  }
+]
