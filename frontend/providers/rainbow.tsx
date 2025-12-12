@@ -39,13 +39,24 @@ const config = getDefaultConfig({
   ssr: false,
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
+        <RainbowKitProvider
+          modalSize="compact"
+          appInfo={{
+            appName: 'Perpetual DEX',
+          }}
+        >
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>

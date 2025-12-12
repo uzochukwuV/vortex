@@ -15,6 +15,7 @@ import { useAccount } from "wagmi"
 import { parseUnits } from "viem"
 import { toast } from "sonner"
 import { COLLATERAL_TOKEN_ADDRESS, PERPETUAL_TRADING_ADDRESS } from "@/lib/constants"
+import { ClientOnly } from "@/components/client-only"
 
 const COLLATERAL_DECIMALS = 6; // USDT has 6 decimals
 
@@ -47,45 +48,49 @@ export function OrderPanel({ asset = 'BTC' }: { asset?: string }) {
           </TabsList>
 
           <TabsContent value="long" className="mt-4 space-y-4">
-            <OrderForm
-              side="long"
-              asset={asset}
-              orderType={orderType}
-              setOrderType={setOrderType}
-              leverage={leverage}
-              setLeverage={setLeverage}
-              amount={amount}
-              setAmount={setAmount}
-              limitPrice={limitPrice}
-              setLimitPrice={setLimitPrice}
-              stopLoss={stopLoss}
-              setStopLoss={setStopLoss}
-              takeProfit={takeProfit}
-              setTakeProfit={setTakeProfit}
-              leveragePresets={leveragePresets}
-              userAddress={address}
-            />
+            <ClientOnly>
+              <OrderForm
+                side="long"
+                asset={asset}
+                orderType={orderType}
+                setOrderType={setOrderType}
+                leverage={leverage}
+                setLeverage={setLeverage}
+                amount={amount}
+                setAmount={setAmount}
+                limitPrice={limitPrice}
+                setLimitPrice={setLimitPrice}
+                stopLoss={stopLoss}
+                setStopLoss={setStopLoss}
+                takeProfit={takeProfit}
+                setTakeProfit={setTakeProfit}
+                leveragePresets={leveragePresets}
+                userAddress={address}
+              />
+            </ClientOnly>
           </TabsContent>
 
           <TabsContent value="short" className="mt-4 space-y-4">
-            <OrderForm
-              side="short"
-              asset={asset}
-              orderType={orderType}
-              setOrderType={setOrderType}
-              leverage={leverage}
-              setLeverage={setLeverage}
-              amount={amount}
-              setAmount={setAmount}
-              limitPrice={limitPrice}
-              setLimitPrice={setLimitPrice}
-              stopLoss={stopLoss}
-              setStopLoss={setStopLoss}
-              takeProfit={takeProfit}
-              setTakeProfit={setTakeProfit}
-              leveragePresets={leveragePresets}
-              userAddress={address}
-            />
+            <ClientOnly>
+              <OrderForm
+                side="short"
+                asset={asset}
+                orderType={orderType}
+                setOrderType={setOrderType}
+                leverage={leverage}
+                setLeverage={setLeverage}
+                amount={amount}
+                setAmount={setAmount}
+                limitPrice={limitPrice}
+                setLimitPrice={setLimitPrice}
+                stopLoss={stopLoss}
+                setStopLoss={setStopLoss}
+                takeProfit={takeProfit}
+                setTakeProfit={setTakeProfit}
+                leveragePresets={leveragePresets}
+                userAddress={address}
+              />
+            </ClientOnly>
           </TabsContent>
         </Tabs>
       </div>
@@ -256,7 +261,9 @@ function OrderForm({
             className="text-xs px-2 py-1 rounded bg-primary/20 text-primary hover:bg-primary/30 transition-colors"
             disabled={!userAddress || ethersToken.isPending}
           >
-            {ethersToken.isPending ? 'Minting...' : 'Mint Test USDT'}
+            <ClientOnly>
+              {ethersToken.isPending ? 'Minting...' : 'Mint Test USDT'}
+            </ClientOnly>
           </button>
         </div>
         <div className="flex items-baseline gap-2">
@@ -373,7 +380,9 @@ function OrderForm({
           isLong ? "bg-green-600 hover:bg-green-700 text-white" : "bg-red-600 hover:bg-red-700 text-white"
         }`}
       >
-        {!userAddress ? 'Connect Wallet' : isPending ? 'Opening...' : `${isLong ? "Long" : "Short"} ${asset}-USD`}
+        <ClientOnly>
+          {!userAddress ? 'Connect Wallet' : isPending ? 'Opening...' : `${isLong ? "Long" : "Short"} ${asset}-USD`}
+        </ClientOnly>
       </Button>
     </div>
   )

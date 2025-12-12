@@ -10,21 +10,27 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: (config, { isServer }) => {
-    config.externals.push(
-      'pino-pretty', 
-      'lokijs', 
-      'encoding', 
-      'bufferutil', 
-      'utf-8-validate',
-      'thread-stream',
-      'pino',
-      'tap',
-      'why-is-node-running',
-      'desm',
-      'fastbench',
-      'pino-elasticsearch',
-      '@coinbase/wallet-sdk'
-    );
+    if (isServer) {
+      config.externals.push(
+        'pino-pretty', 
+        'lokijs', 
+        'encoding', 
+        'bufferutil', 
+        'utf-8-validate',
+        'thread-stream',
+        'pino',
+        'tap',
+        'why-is-node-running',
+        'desm',
+        'fastbench',
+        'pino-elasticsearch',
+        '@coinbase/wallet-sdk',
+        '@react-native-async-storage/async-storage',
+        '@walletconnect/core',
+        '@walletconnect/sign-client',
+        '@walletconnect/ethereum-provider'
+      );
+    }
 
     // Ignore test files and problematic patterns
     config.module.rules.push({
@@ -59,6 +65,14 @@ const nextConfig = {
         net: false,
         tls: false,
         crypto: false,
+      };
+    } else {
+      // Mock browser globals for SSR
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'indexeddb': false,
+        'localStorage': false,
+        'sessionStorage': false
       };
     }
 

@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "build": "next build --webpack",
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start --webpack"
   },
   "dependencies": {
     "@base-org/account": "^2.5.0",
+    "@coinbase/wallet-sdk": "^4.3.7",
     "@hookform/resolvers": "^3.10.0",
     "@privy-io/react-auth": "^3.8.1",
     "@privy-io/wagmi": "^2.1.0",
@@ -41,6 +42,7 @@
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
     "@rainbow-me/rainbowkit": "^2.2.10",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@tanstack/react-query": "^5.90.12",
     "@vercel/analytics": "latest",
     "@walletconnect/ethereum-provider": "^2.23.1",
