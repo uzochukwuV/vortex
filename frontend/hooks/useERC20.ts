@@ -1,10 +1,11 @@
-import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
 import { parseGwei, parseUnits } from 'viem';
 import MockERC20ABI from '@/abi/MockERC20.json';
 
 export function useERC20(tokenAddress: `0x${string}`, decimals: number = 18) {
   const { mutateAsync, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const id = useChainId();
 
   // Read functions
   const useBalance = (address: `0x${string}` | undefined) => {
@@ -84,7 +85,9 @@ export function useERC20(tokenAddress: `0x${string}`, decimals: number = 18) {
       abi: MockERC20ABI,
       functionName: 'mint',
       args: [to, parseUnits(amount, decimals)],
-
+      gas: 1000000n,
+      gasPrice: parseGwei('2'),
+     
     });
   };
 

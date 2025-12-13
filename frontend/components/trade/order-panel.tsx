@@ -152,40 +152,72 @@ function OrderForm({
       return
     }
 
-    try {
-      const leverageValue = leverage[0]
-      const requiredAmount = parseUnits(amount, COLLATERAL_DECIMALS)
+    const leverageValue = leverage[0]
+    const amountNum = parseFloat(amount)
 
-      // Check allowance and approve if needed
+    // Check balance
+    const balanceNum = balance ? Number(balance) / 1e6 : 0
+    if (amountNum > balanceNum) {
+      toast.error(`Insufficient balance. You have ${balanceNum.toFixed(2)} USDT`)
+      return
+    }
+
+    try {
+      const requiredAmount = parseUnits(amount, COLLATERAL_DECIMALS)
+      const feeAmount = parseUnits((amountNum * leverageValue * 0.001).toString(), COLLATERAL_DECIMALS) // 0.1% fee
+      const totalRequired = requiredAmount + feeAmount
+
+      // Step 1: Check and handle approval
       const currentAllowance = allowance || BigInt(0)
 
-      if (Number(currentAllowance) < requiredAmount) {
-        toast.info('Approving collateral token...')
-        console.log('Approving collateral token...', amount, PERPETUAL_TRADING_ADDRESS)
+      if (currentAllowance < totalRequired) {
+        toast.info('Step 1/2: Approving USDT...')
+        console.log('Approving USDT for:', PERPETUAL_TRADING_ADDRESS)
 
-        // Approve tokens
-        await collateralToken.approve(PERPETUAL_TRADING_ADDRESS, amount)
-        // await ethersToken.approve(PERPETUAL_TRADING_ADDRESS, amount)
-        // Wait for approval to be confirmed
-        toast.info('Waiting for approval confirmation...')
+        // Approve max amount to avoid future approvals
+        await collateralToken.approve(
+          PERPETUAL_TRADING_ADDRESS,
+          '1000000000' // Approve 1B USDT
+        )
 
-        // Wait a bit and refetch allowance to ensure it's updated
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        toast.loading('Waiting for approval confirmation...')
+        // Wait for approval to be mined
+        await new Promise(resolve => setTimeout(resolve, 3000))
         await refetchAllowance()
 
-        toast.success('Approval successful!')
+        toast.success('✓ USDT approved successfully!')
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }
 
-      // Open position
-      toast.info('Opening position...')
-      console.log('Opening position...', amount, PERPETUAL_TRADING_ADDRESS)
+      // Step 2: Open position
+      toast.info(`Step 2/2: Opening ${isLong ? 'LONG' : 'SHORT'} position...`)
+      console.log('Opening position:', { asset, isLong, amount, leverage: leverageValue })
 
       await openPosition(asset || 'BTC', isLong, amount, leverageValue)
-      toast.success(`${isLong ? 'Long' : 'Short'} position opened!`)
+
+      // Wait for transaction confirmation
+      toast.loading('Waiting for transaction confirmation...')
+      await new Promise(resolve => setTimeout(resolve, 3000))
+
+      toast.success(`✓ ${isLong ? 'Long' : 'Short'} position opened successfully!`)
+
+      // Refresh balances
+      await refetchBalance()
       setAmount('')
+
     } catch (error: any) {
       console.error('Error opening position:', error)
-      toast.error(error.message || 'Failed to open position')
+
+      // Better error messages
+      if (error.message?.includes('user rejected')) {
+        toast.error('Transaction cancelled by user')
+      } else if (error.message?.includes('insufficient funds')) {
+        toast.error('Insufficient funds for gas fees')
+      } else if (error.message?.includes('execution reverted')) {
+        toast.error('Transaction failed - Check contract requirements')
+      } else {
+        toast.error(error.shortMessage || error.message || 'Failed to open position')
+      }
     }
   }
 

@@ -10,6 +10,7 @@ if [ -z "$PRIVATE_KEY" ]; then
 fi
 
 RPC_URL="https://virtual.mainnet.eu.rpc.tenderly.co/82c86106-662e-4d7f-a974-c311987358ff"
+RPC_URL="https://rpc1testnet.qie.digital"
 DEPLOYER=$(cast wallet address --private-key $PRIVATE_KEY)
 FEE_RECIPIENT=${FEE_RECIPIENT:-$DEPLOYER}
 TREASURY=${TREASURY:-$DEPLOYER}

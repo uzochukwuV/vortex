@@ -2,7 +2,7 @@
 
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { WagmiProvider } from 'wagmi';
+import { fallback, WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Define Tenderly Fork chain
@@ -31,11 +31,52 @@ const tenderlyFork = {
   testnet: true,
 } as const;
 
+
+
+const qieBlockchain = {
+  id: 1983,
+  name: 'QIE Testnet',
+  nativeCurrency: {
+    name: 'QIE',
+    symbol: 'QIE',
+    decimals: 18,
+  },
+  rpcUrls: {
+    default: {
+      http: [
+         'https://rpc1testnet.qie.digital/',
+        'https://rpc2testnet.qie.digital/',
+        'https://rpc3testnet.qie.digital/',
+      ],
+
+    },
+    fallback : {
+      http: [
+        'https://rpc1testnet.qie.digital/',
+        'https://rpc2testnet.qie.digital/',
+        'https://rpc3testnet.qie.digital/',
+      ],
+     
+    },
+    public: {
+      http: ['https://rpc1testnet.qie.digital/'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'QIE Explorer',
+      url: 'https://testnet-explorer.qie.digital/',
+    },
+  },
+  testnet: true,
+
+}
+
 // Configure wagmi with RainbowKit
 const config = getDefaultConfig({
   appName: 'Perpetual DEX',
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-  chains: [tenderlyFork as any],
+  chains: [tenderlyFork as any, qieBlockchain as any ],
   ssr: false,
 });
 

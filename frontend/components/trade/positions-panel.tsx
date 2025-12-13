@@ -4,15 +4,28 @@ import { useState } from "react"
 import { X, TrendingUp, TrendingDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { usePositionEvents } from "@/hooks/usePositionEvents"
 import { usePerpetualTrading } from "@/hooks/usePerpetualTrading"
 import { usePriceData } from "@/hooks/usePriceData"
 import { useAccount } from "wagmi"
 import { formatUnits } from "viem"
 import { toast } from "sonner"
+import { ClientOnly } from "@/components/client-only"
 
 export function PositionsPanel() {
   const [activeTab, setActiveTab] = useState("positions")
+  const [positionToClose, setPositionToClose] = useState<{ id: bigint; asset: string; isLong: boolean } | null>(null)
+  const [isClosing, setIsClosing] = useState(false)
   const { address } = useAccount()
   const { openPositions } = usePositionEvents()
   const { closePosition, isPending } = usePerpetualTrading()
@@ -22,13 +35,38 @@ export function PositionsPanel() {
   // Filter user's positions
   const userPositions = openPositions.filter(p => p.trader.toLowerCase() === address?.toLowerCase())
 
-  const handleClosePosition = async (positionId: bigint) => {
+  const handleClosePosition = async () => {
+    if (!positionToClose || !address) {
+      toast.error('Please connect your wallet')
+      return
+    }
+
+    setIsClosing(true)
     try {
-      toast.info('Closing position...')
-      await closePosition(positionId)
-      toast.success('Position closed successfully!')
+      toast.info(`Closing ${positionToClose.isLong ? 'LONG' : 'SHORT'} position on ${positionToClose.asset}...`)
+
+      await closePosition(positionToClose.id)
+
+      toast.loading('Waiting for transaction confirmation...')
+      await new Promise(resolve => setTimeout(resolve, 3000))
+
+      toast.success(`✓ ${positionToClose.isLong ? 'Long' : 'Short'} position closed successfully!`)
+      setPositionToClose(null)
+
     } catch (error: any) {
-      toast.error(error.message || 'Failed to close position')
+      console.error('Error closing position:', error)
+
+      if (error.message?.includes('user rejected')) {
+        toast.error('Transaction cancelled by user')
+      } else if (error.message?.includes('insufficient funds')) {
+        toast.error('Insufficient funds for gas fees')
+      } else if (error.message?.includes('execution reverted')) {
+        toast.error('Transaction failed - Check contract requirements')
+      } else {
+        toast.error(error.shortMessage || error.message || 'Failed to close position')
+      }
+    } finally {
+      setIsClosing(false)
     }
   }
 
@@ -133,13 +171,19 @@ export function PositionsPanel() {
                       </td>
                       <td className="p-3 text-right">
                         <Button
-                          onClick={() => handleClosePosition(position.positionId)}
-                          disabled={isPending}
+                          onClick={() => setPositionToClose({
+                            id: position.positionId,
+                            asset: position.asset,
+                            isLong: position.isLong
+                          })}
+                          disabled={isPending || isClosing}
                           variant="outline"
                           size="sm"
                           className="h-7 text-xs text-red-500 hover:text-red-400 bg-transparent"
                         >
-                          {isPending ? 'Closing...' : 'Close'}
+                          <ClientOnly>
+                            {isPending || isClosing ? 'Closing...' : 'Close'}
+                          </ClientOnly>
                         </Button>
                       </td>
                     </tr>
@@ -162,6 +206,30 @@ export function PositionsPanel() {
           </div>
         </TabsContent>
       </Tabs>
+
+      <AlertDialog open={!!positionToClose} onOpenChange={(open) => !open && setPositionToClose(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Close Position</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to close this {positionToClose?.isLong ? 'LONG' : 'SHORT'} position on{' '}
+              {positionToClose?.asset}? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isClosing}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleClosePosition}
+              disabled={isClosing}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              <ClientOnly>
+                {isClosing ? 'Closing...' : 'Close Position'}
+              </ClientOnly>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
