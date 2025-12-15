@@ -9,13 +9,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     if (isServer) {
       config.externals.push(
-        'pino-pretty', 
-        'lokijs', 
-        'encoding', 
-        'bufferutil', 
+        'pino-pretty',
+        'lokijs',
+        'encoding',
+        'bufferutil',
         'utf-8-validate',
         'thread-stream',
         'pino',
@@ -32,31 +32,25 @@ const nextConfig = {
       );
     }
 
-    // Ignore test files and problematic patterns
-    config.module.rules.push({
-      test: /node_modules\/thread-stream\/(test|bench)/,
-      use: 'ignore-loader'
-    });
-    
-    config.module.rules.push({
-      test: /\.(test|spec)\.(js|mjs|ts)$/,
-      use: 'ignore-loader'
-    });
-    
-    config.module.rules.push({
-      test: /\/(test|tests)\//,
-      use: 'ignore-loader'
-    });
-    
-    config.module.rules.push({
-      test: /\.(sh|yml|yaml)$/,
-      use: 'ignore-loader'
-    });
-    
-    config.module.rules.push({
-      test: /\/LICENSE$/,
-      use: 'ignore-loader'
-    });
+    // Fix for viem test module exports in Vercel
+    config.plugins.push(
+      new webpack.NormalModuleReplacementPlugin(
+        /viem\/_esm\/actions\/test\/.*/,
+        (resource) => {
+          resource.request = resource.request.replace(/.*/, 'node:stream');
+        }
+      )
+    );
+
+    // Additional aliases to prevent test imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'viem/actions/test/dropTransaction': false,
+      'viem/actions/test/dumpState': false,
+      'viem/actions/test/getAutomine': false,
+      'viem/actions/test/getTxpoolContent': false,
+      'viem/actions/test/getTxpoolStatus': false,
+    };
 
     if (!isServer) {
       config.resolve.fallback = {
@@ -75,6 +69,17 @@ const nextConfig = {
         'sessionStorage': false
       };
     }
+
+    // Externalize viem test actions to prevent bundling
+    config.externals = [
+      ...config.externals,
+      ({ request }, callback) => {
+        if (/viem\/_esm\/actions\/test\//.test(request)) {
+          return callback(null, 'commonjs ' + request);
+        }
+        callback();
+      },
+    ];
 
     return config;
   },
