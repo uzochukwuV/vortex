@@ -2,6 +2,7 @@
 
 ## 🎯 Project Overview
 
+https://vortex-delta-navy.vercel.app/
 A decentralized perpetual futures trading platform built for **QIE Blockchain (Chain ID: 1990)** with Chainlink price feeds, platform token economics, and governance.
 
 **Simplified Focus**: Perpetual Trading Only (Spot Market Removed)
